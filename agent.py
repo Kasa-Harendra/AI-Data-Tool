@@ -100,9 +100,8 @@ class PandasAgent():
             
     def run_code(self):
         imports_code = f"""import pandas as pd
-df = pd.read_csv('{self._df_path}')
-df = df.iloc[: , 1:]"""
-        code_to_run = imports_code + self.get_code() + f"df.to_csv('{self._df_path}')"
+df = pd.read_csv('{self._df_path}')"""
+        code_to_run = imports_code + self.get_code() + f"\ndf.to_csv('{self._df_path}', index=False)"
         output = self.runner.run(code_to_run)
 
         if len(output) == 0:
