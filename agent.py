@@ -20,7 +20,7 @@ class PandasAgent():
 
         os.makedirs('data', exist_ok=True)
 
-        self._df_path = f'data/{st.session_state['session_id']}.csv'
+        self._df_path = f"data/{st.session_state['session_id']}.csv"
         self._df.to_csv(self._df_path, index=False)
         self.response = None 
 
@@ -109,7 +109,7 @@ df = df.iloc[: , 1:]"""
             output = "Executed Successfully"
 
         if "plt.show()" in code_to_run:
-            plt.savefig(f'data/{st.session_state['session_id']}.png')
+            plt.savefig(f"data/{st.session_state['session_id']}.png")
             output = None        
 
         self.update_df()
