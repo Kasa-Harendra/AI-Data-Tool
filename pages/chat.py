@@ -16,7 +16,6 @@ def run_code(container):
             st.image(image)
 
 def clean_session():
-    """Cleans up session resources and resets the state."""
     if 'agent' in st.session_state:
         st.session_state.agent.cleanup()
     
