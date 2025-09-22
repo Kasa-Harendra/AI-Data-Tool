@@ -29,5 +29,6 @@ if st.button(label="Chat now"):
     st.switch_page("pages/chat.py")
 
 with st.sidebar:
-    st.session_state['content'] = ''
+    if 'content' not in st.session_state:
+        st.session_state['content'] = ''
     st.download_button(label="Download Preprocessed Data", data=st.session_state['content'], file_name="data.csv")
