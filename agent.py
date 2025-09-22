@@ -1,10 +1,10 @@
 import pandas as pd
 import requests
 from langchain.prompts import PromptTemplate
-from pathlib import Path
 from langchain_experimental.utilities import PythonREPL
 import streamlit as st
 import matplotlib.pyplot as plt
+import os
 
 class PandasAgent():
     
@@ -17,12 +17,16 @@ class PandasAgent():
         self._model = model
         self._api_key = api_key
         self._df = df
-        self._df_path = 'data/data.csv'
+
+        os.makedirs('data', exist_ok=True)
+
+        self._df_path = f"data/{st.session_state['session_id']}.csv"
         self._df.to_csv(self._df_path, index=False)
         self.response = None 
 
         self._prompt = PromptTemplate.from_template(
             template = """
+            You are a data scientist assistant and must strictly answer only those queries that are related to the given data. In case of any unnecessary queries reply "I don't know"
             From the given dataframe: `{df}`
             Reason the following query: {query}
             Include code as well. (code given should be compatabile with markdown format).
@@ -63,6 +67,7 @@ class PandasAgent():
     
     def update_df(self):
         self._df = pd.read_csv(self._df_path)
+        st.session_state['content'] = self._df.to_string(index=False)
         
     def chat(self, query: str):
         try:
@@ -95,17 +100,26 @@ class PandasAgent():
             
     def run_code(self):
         imports_code = f"""import pandas as pd
-df = pd.read_csv('{self._df_path}')
-df = df.iloc[: , 1:]"""
-        code_to_run = imports_code + self.get_code() + f"df.to_csv('{self._df_path}')"
+df = pd.read_csv('{self._df_path}')"""
+        code_to_run = imports_code + self.get_code() + f"\ndf.to_csv('{self._df_path}', index=False)"
         output = self.runner.run(code_to_run)
 
         if len(output) == 0:
             output = "Executed Successfully"
 
         if "plt.show()" in code_to_run:
-            plt.savefig('data/plot.png')
+            plt.savefig(f"data/{st.session_state['session_id']}.png")
             output = None        
 
         self.update_df()
         return output
+
+    def cleanup(self):
+        csv_path = self._df_path
+        png_path = f"data/{st.session_state['session_id']}.png"
+
+        if os.path.exists(csv_path):
+            os.remove(csv_path)
+        
+        if os.path.exists(png_path):
+            os.remove(png_path)
