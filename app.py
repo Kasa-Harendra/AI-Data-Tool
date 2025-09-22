@@ -14,7 +14,7 @@ df = upload_file()
 if df is not None:
     if 'agent' not in st.session_state:
         st.session_state['agent'] = PandasAgent(
-            api_key=os.environ['API-KEY'], # It's better to use st.secrets for API keys
+            api_key=st.secrets['API-KEY'], # It's better to use st.secrets for API keys
             model="gpt-oss:20b",
             df=st.session_state['df']
         )
