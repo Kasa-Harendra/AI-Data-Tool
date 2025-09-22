@@ -25,5 +25,5 @@ if st.button(label="Chat now"):
 with st.sidebar:
     # with open('data/data.csv') as f:
     #     content = f.read()
-    st.session_state['content'] = None
+    st.session_state['content'] = ''
     st.download_button(label="Download Preprocessed Data", data=st.session_state['content'], file_name="data.csv")
