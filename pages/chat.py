@@ -14,7 +14,6 @@ def run_code(container):
         elif output == None:
             image = Image.open(f"data/{st.session_state['session_id']}.png")
             st.image(image)
-            os.remove(f"data/{st.session_state['session_id']}.png")
 
 if 'agent' not in st.session_state:
     st.error("No agent found. Please upload a file on the main page first.")
