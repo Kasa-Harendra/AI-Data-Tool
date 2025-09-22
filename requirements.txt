@@ -11,7 +11,7 @@ plotly
 requests
 langchain-experimental
 uuid
-scikit-learn==1.7.1
+scikit-learn
 time
 datetime
 tabulate
