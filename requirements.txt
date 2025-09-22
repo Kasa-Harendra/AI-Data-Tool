@@ -13,6 +13,5 @@ langchain-experimental
 uuid
 scikit-learn==1.4.0 
 datetime
-tabulate
-math
+tabulate==0.9.0
 weakref
