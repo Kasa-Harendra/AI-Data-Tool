@@ -11,6 +11,5 @@ plotly
 requests
 langchain-experimental
 uuid
-scikit-learn==1.4.0 
-datetime
+scikit-learn==1.4.0
 weakref
