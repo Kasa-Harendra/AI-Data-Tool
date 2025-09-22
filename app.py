@@ -15,6 +15,9 @@ def cleanup(session_id):
     if os.path.exists(png_path):
         os.remove(png_path)
 
+class SessionState:
+    """A simple class to hold session state and allow weak referencing."""
+    pass
 st.set_page_config('AI Data Tool', page_icon="📊")
 
 st.title('AI-Data Tool')
@@ -27,10 +30,8 @@ df = upload_file()
 if df is not None:
     if 'session_id' not in st.session_state:
         st.session_state['session_id'] = str(uuid1())
-        # Create a dummy object and register a finalizer for cleanup
-        # This will be called when the session ends and the object is garbage collected.
-        dummy_obj = object()
-        weakref.finalize(dummy_obj, cleanup, st.session_state['session_id'])
+        state_obj = SessionState()
+        weakref.finalize(state_obj, cleanup, st.session_state['session_id'])
 
     if 'agent' not in st.session_state:
         st.session_state['agent'] = PandasAgent(
