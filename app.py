@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 import os
 from uuid import uuid1 
 
+st.set_page_config('AI Data Tool', page_icon="📊")
+
 st.title('AI-Data Tool')
 st.divider()
 

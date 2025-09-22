@@ -2,6 +2,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from PIL import Image
 
+st.set_page_config('AI Data Tool - Chat', page_icon="📊")
+
 def run_code(container):
     output = st.session_state.agent.run_code()
     
