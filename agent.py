@@ -66,7 +66,7 @@ class PandasAgent():
         self._model = model
     
     def update_df(self):
-        self._df = pd.read_csv(self._df_path)
+        self._df = pd.read_csv(self._df_path, index_col=False)
         st.session_state['content'] = self._df.to_string()
         
     def chat(self, query: str):
