@@ -26,7 +26,7 @@ class PandasAgent():
 
         self._prompt = PromptTemplate.from_template(
             template = """
-            You are a data scientist assistant and must strictly answer only those queries that are related to the data. In case of any unnecessary queries reply "I don't know"
+            You are a data scientist assistant and must strictly answer only those queries that are related to the given data. In case of any unnecessary queries reply "I don't know"
             From the given dataframe: `{df}`
             Reason the following query: {query}
             Include code as well. (code given should be compatabile with markdown format).
@@ -113,3 +113,13 @@ df = pd.read_csv('{self._df_path}')"""
 
         self.update_df()
         return output
+
+    def cleanup(self):
+        csv_path = self._df_path
+        png_path = f"data/{st.session_state['session_id']}.png"
+
+        if os.path.exists(csv_path):
+            os.remove(csv_path)
+        
+        if os.path.exists(png_path):
+            os.remove(png_path)
