@@ -3,6 +3,7 @@ from agent import PandasAgent
 from utils import upload_file
 from dotenv import load_dotenv
 import os
+from uuid import uuid1 
 
 st.title('AI-Data Tool')
 st.divider()
@@ -12,6 +13,8 @@ load_dotenv()
 df = upload_file()
 
 if df is not None:
+    if 'session_id' not in st.session_state:
+        st.session_state['session_id'] = str(uuid1())
     if 'agent' not in st.session_state:
         st.session_state['agent'] = PandasAgent(
             api_key=st.secrets['API-KEY'], # It's better to use st.secrets for API keys

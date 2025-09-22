@@ -9,7 +9,7 @@ def run_code(container):
         if isinstance(output, str): 
             st.markdown(output)
         elif output == None:
-            image = Image.open('data/plot.png')
+            image = Image.open(f'data/{st.session_state['session_id']}.png')
             st.image(image)
 
 if 'agent' not in st.session_state:

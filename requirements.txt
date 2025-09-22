@@ -10,3 +10,4 @@ seaborn
 plotly
 requests
 langchain-experimental
+uuid
