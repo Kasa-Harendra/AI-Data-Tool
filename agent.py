@@ -4,6 +4,7 @@ from langchain.prompts import PromptTemplate
 from langchain_experimental.utilities import PythonREPL
 import streamlit as st
 import matplotlib.pyplot as plt
+import os
 
 class PandasAgent():
     
@@ -16,6 +17,9 @@ class PandasAgent():
         self._model = model
         self._api_key = api_key
         self._df = df
+
+        os.mkdir('data')
+
         self._df_path = 'data/data.csv'
         self._df.to_csv(self._df_path, index=False)
         self.response = None 
