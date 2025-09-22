@@ -1,5 +1,5 @@
 import streamlit as st
-from agent import PandasAgent
+from .agent import PandasAgent
 from utils import upload_file
 from dotenv import load_dotenv
 import os

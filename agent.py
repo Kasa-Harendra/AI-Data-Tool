@@ -1,7 +1,6 @@
 import pandas as pd
 import requests
 from langchain.prompts import PromptTemplate
-from pathlib import Path
 from langchain_experimental.utilities import PythonREPL
 import streamlit as st
 import matplotlib.pyplot as plt

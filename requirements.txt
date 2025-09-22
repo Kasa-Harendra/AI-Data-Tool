@@ -1,0 +1,12 @@
+streamlit
+dotenv
+pandas
+numpy
+langchain
+langchain-community
+pillow
+matplotlib
+seaborn
+plotly
+requests
+langchain-experimental
