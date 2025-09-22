@@ -1,6 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 from PIL import Image
+import os
 
 st.set_page_config('AI Data Tool - Chat', page_icon="📊")
 
@@ -13,6 +14,7 @@ def run_code(container):
         elif output == None:
             image = Image.open(f"data/{st.session_state['session_id']}.png")
             st.image(image)
+            os.remove(f"data/{st.session_state['session_id']}.png")
 
 if 'agent' not in st.session_state:
     st.error("No agent found. Please upload a file on the main page first.")
