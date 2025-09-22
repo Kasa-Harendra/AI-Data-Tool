@@ -132,3 +132,6 @@ PandasAI/
     Product B    20000
     Name: Sales, dtype: int64
     ```
+
+## Note
+Make sure to `clear session data and resources` before leaving the session
