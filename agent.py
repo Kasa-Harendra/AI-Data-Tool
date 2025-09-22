@@ -26,7 +26,7 @@ class PandasAgent():
 
         self._prompt = PromptTemplate.from_template(
             template = """
-            You are a data scientist assistant and must strictly answer only those queries. In case of any unnecessary queries reply "I don't know"
+            You are a data scientist assistant and must strictly answer only those queries that are related to the data. In case of any unnecessary queries reply "I don't know"
             From the given dataframe: `{df}`
             Reason the following query: {query}
             Include code as well. (code given should be compatabile with markdown format).
