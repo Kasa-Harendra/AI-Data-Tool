@@ -23,6 +23,7 @@ if st.button(label="Chat now"):
     st.switch_page("pages/chat.py")
 
 with st.sidebar:
-    with open('data/data.csv') as f:
-        content = f.read()
-    st.download_button(label="Download Preprocessed Data", data=content, file_name="data.csv")
+    # with open('data/data.csv') as f:
+    #     content = f.read()
+    st.session_state['content'] = None
+    st.download_button(label="Download Preprocessed Data", data=st.session_state['content'], file_name="data.csv")
