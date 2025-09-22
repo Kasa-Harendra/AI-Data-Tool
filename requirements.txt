@@ -11,3 +11,8 @@ plotly
 requests
 langchain-experimental
 uuid
+scikit-learn
+time
+datetime
+tabulate
+math
