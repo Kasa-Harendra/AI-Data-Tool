@@ -46,7 +46,8 @@ if prompt := st.chat_input("Your message..."):
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        response = st.session_state.agent.chat(prompt)
+        with st.spinner("Thinking..."):
+            response = st.session_state.agent.chat(prompt)
         st.markdown(response)
 
     container = st.container(border=True)
