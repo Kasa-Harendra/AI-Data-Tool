@@ -48,7 +48,7 @@ if prompt := st.chat_input("Your message..."):
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             response = st.session_state.agent.chat(prompt)
-            st.markdown(response)
+        st.markdown(response)
 
     container = st.container(border=True)
     st.button(label="Execute", on_click=run_code, args=(container, ))
