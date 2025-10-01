@@ -5,6 +5,7 @@ from langchain_experimental.utilities import PythonREPL
 import streamlit as st
 import matplotlib.pyplot as plt
 import os
+import re
 
 class PandasAgent():
     
