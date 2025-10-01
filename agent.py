@@ -68,6 +68,48 @@ class PandasAgent():
     def update_df(self):
         self._df = pd.read_csv(self._df_path)
         st.session_state['content'] = self._df.to_string(index=False)
+
+    def preprocess_code(self, raw_code: str) -> str:
+        if not raw_code or not raw_code.strip():
+            return ""
+        
+        lines = raw_code.split('\n')
+        
+        while lines and not lines[0].strip():
+            lines.pop(0)
+        while lines and not lines[-1].strip():
+            lines.pop()
+        
+        if not lines:
+            return ""
+        
+        min_indent = float('inf')
+        for line in lines:
+            if line.strip():  
+                indent = len(line) - len(line.lstrip())
+                min_indent = min(min_indent, indent)
+        
+        if min_indent == float('inf'):
+            min_indent = 0
+        
+        dedented_lines = []
+        for line in lines:
+            if line.strip():
+                dedented_lines.append(line[min_indent:])
+            else:
+                dedented_lines.append("")
+        
+        cleaned_code = '\n'.join(dedented_lines)
+        
+        cleaned_code = cleaned_code.strip()
+        
+        cleaned_code = re.sub(r'^```python\s*', '', cleaned_code, flags=re.MULTILINE)
+        cleaned_code = re.sub(r'^```\s*$', '', cleaned_code, flags=re.MULTILINE)
+        cleaned_code = re.sub(r'^\s*python\s*$', '', cleaned_code, flags=re.MULTILINE)
+        
+        cleaned_code = re.sub(r'\n\s*\n\s*$', '\n', cleaned_code)
+        
+        return cleaned_code
         
     def chat(self, query: str):
         try:
@@ -96,7 +138,8 @@ class PandasAgent():
     def get_code(self):
         if self.response: 
             code_blocks = self.response.split("```")
-            return ''.join([code.strip("python") for code in code_blocks if code.startswith('python')])
+            raw_code = ''.join([code.strip("python") for code in code_blocks if code.startswith('python')])
+            return self.preprocess_code(raw_code)
             
     def run_code(self):
         imports_code = f"""import pandas as pd
