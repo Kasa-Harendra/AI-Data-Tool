@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 from langchain.prompts import PromptTemplate
 from langchain_experimental.utilities import PythonREPL
+from langchain_google_genai import GoogleGenerativeAI
 import streamlit as st
 import matplotlib.pyplot as plt
 import os
@@ -9,15 +10,12 @@ import re
 
 class PandasAgent():
     
-    import pandas as pd
-    import requests
-    from langchain.prompts import PromptTemplate
-    from langchain_experimental.utilities import PythonREPL
-    
     def __init__(self, api_key: str, model: str, df: pd.DataFrame):
         self._model = model
         self._api_key = api_key
         self._df = df
+        self._genai_key = st.secrets.get('GOOGLE-API-KEY', None)
+        self.llm = GoogleGenerativeAI(model="gemini-2.0-flash", api_key=self._genai_key)
 
         os.makedirs('data', exist_ok=True)
 
@@ -49,7 +47,7 @@ class PandasAgent():
                     'API-KEY': api_key
                 }
             )
-            response.raise_for_status() # Raise an exception for bad status codes
+            response.raise_for_status() 
             return [model['name'] for model in response.json().get('models', [])] 
             
         except requests.exceptions.RequestException as e:
@@ -115,18 +113,23 @@ class PandasAgent():
     def chat(self, query: str):
         try:
             prompt_str = self._prompt.invoke({'df': self._df.head().to_string(), 'query': query}).to_string().strip()
-            response = requests.post(
-                url="https://aihub-vvitu.social/api/ollama-api/generate/",
-                headers={
-                    'API-KEY': self._api_key
-                },
-                json={
-                    "model": self._model,
-                    "prompt": prompt_str
-                }
-            )
-            response.raise_for_status()
-            self.response = str(response.json().get('response', 'No response field in result.'))
+
+            try: 
+                response = self.llm.invoke(prompt_str)
+                self.response = response
+            except Exception as e:
+                response = requests.post(
+                    url="https://aihub-vvitu.social/api/ollama-api/generate/",
+                    headers={
+                        'API-KEY': self._api_key
+                    },
+                    json={
+                        "model": self._model,
+                        "prompt": prompt_str
+                    }
+                )
+                response.raise_for_status()
+                self.response = str(response.json().get('response', 'No response field in result.'))
             return self.response
             
         except requests.exceptions.RequestException as e:
@@ -144,7 +147,7 @@ class PandasAgent():
             
     def run_code(self):
         imports_code = f"""import pandas as pd
-df = pd.read_csv('{self._df_path}')"""
+df = pd.read_csv('{self._df_path}')\n"""
         code_to_run = imports_code + self.get_code() + f"\ndf.to_csv('{self._df_path}', index=False)"
         output = self.runner.run(code_to_run)
 
